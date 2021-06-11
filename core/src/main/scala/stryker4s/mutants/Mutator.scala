@@ -10,8 +10,9 @@ import stryker4s.log.Logger
 import stryker4s.model.{MutatedFile, MutationsInSource, SourceTransformations}
 import stryker4s.mutants.applymutants.{MatchBuilder, StatementTransformer}
 import stryker4s.mutants.findmutants.MutantFinder
+import stryker4s.mutants.tree.{MutantCollector, MutantInstrumenter}
 
-import scala.meta.Tree
+import scala.meta.{Source, Tree}
 
 class Mutator(mutantFinder: MutantFinder, transformer: StatementTransformer, matchBuilder: MatchBuilder)(implicit
     config: Config,
@@ -31,6 +32,14 @@ class Mutator(mutantFinder: MutantFinder, transformer: StatementTransformer, mat
       .compile
       .toVector
       .flatTap(logMutationResult)
+  }
+
+  def mutateFile(source: Source) = {
+    val collector: MutantCollector = ???
+    val instrumenter: MutantInstrumenter = ???
+    val mutantMap = collector(source)
+
+    instrumenter(mutantMap)
   }
 
   /** Step 1: Find mutants in the found files
